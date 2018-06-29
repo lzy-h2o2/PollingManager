@@ -2,6 +2,7 @@ package com.zndroid.polling.core;
 
 import android.content.Context;
 
+import com.zndroid.polling.PollingManager;
 import com.zndroid.polling.power.PowerEnum;
 
 /**
@@ -10,8 +11,8 @@ import com.zndroid.polling.power.PowerEnum;
  * @description
  */
 public interface IFunctions {
-    void build(PowerEnum power);
-    void with(Context context);
-    void startPolling();
+    PollingManager build(PowerEnum power);
+    PollingManager with(Context context);
+    PollingManager startPolling();
     void endPolling();
 }

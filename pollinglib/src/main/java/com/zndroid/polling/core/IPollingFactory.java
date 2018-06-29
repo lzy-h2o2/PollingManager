@@ -6,5 +6,5 @@ package com.zndroid.polling.core;
  * @description
  */
 public interface IPollingFactory {
-    public IPolling createPolling();
+    IPolling createPolling();
 }
