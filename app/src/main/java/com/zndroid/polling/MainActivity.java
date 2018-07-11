@@ -3,6 +3,7 @@ package com.zndroid.polling;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.zndroid.polling.core.IPollRunning;
 import com.zndroid.polling.power.PowerEnum;
 
 public class MainActivity extends Activity {
@@ -20,6 +21,12 @@ public class MainActivity extends Activity {
         pollingManager
                 .build(PowerEnum.LOW)
                 .with(this)
+                .resultAt(new IPollRunning() {
+                    @Override
+                    public void run() {
+
+                    }
+                })
                 .startPolling();
     }
 }

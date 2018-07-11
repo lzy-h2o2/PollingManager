@@ -9,7 +9,7 @@ import com.zndroid.polling.core.IPolling;
  * @create 2018/6/28
  * @description
  */
-public class HighPolling implements IPolling {
+public class HighPolling extends IPolling {
     @Override
     public void init(Context context) {
 

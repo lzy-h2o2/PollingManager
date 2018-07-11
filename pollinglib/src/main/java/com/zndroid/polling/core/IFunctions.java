@@ -11,8 +11,12 @@ import com.zndroid.polling.power.PowerEnum;
  * @description
  */
 public interface IFunctions {
-    PollingManager build(PowerEnum power);
-    PollingManager with(Context context);
+    //// init work
+    PollingManager build(PowerEnum mPowerEnum);
+    PollingManager with(Context mContext);
+    PollingManager resultAt(IPollRunning pollRunning);
+
+    //// api
     PollingManager startPolling();
     void endPolling();
 }
