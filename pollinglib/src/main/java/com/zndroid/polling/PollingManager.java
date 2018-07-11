@@ -29,7 +29,7 @@ public class PollingManager implements IFunctions{
                                                 1 << 7 |
                                                     1 << 6 |
                                                         1 << 5 |
-                                                                1 << 3;//1 * 1000
+                                                                1 << 3;//1 * 1000ms
 
     /** default time -> '3' seconds */
     public static final long __3s_TIME =                               (1 << 1 |
