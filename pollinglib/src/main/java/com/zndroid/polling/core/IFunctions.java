@@ -17,6 +17,8 @@ public interface IFunctions {
     PollingManager resultAt(IPollRunning pollRunning);
 
     //// api
-    PollingManager startPolling();
+    void doPolling();
+    void doDelay(long delayTime);
+    void doDelayAt(long delayTime);
     void endPolling();
 }

@@ -19,25 +19,30 @@ public class PollingManager implements IFunctions{
     private final String TAG = "PollingManager";
 
     //////////////////////////////////////////////
+    //                                       9   8   7   6   5   4   3   2   1   0
     /** default time right away  -> '0' seconds */
     public static final long __0s_TIME = 0;
 
+    /** default time  -> '1' seconds */
+    public static final long __1s_TIME =1 << 9 |
+                                            1 << 8 |
+                                                1 << 7 |
+                                                    1 << 6 |
+                                                        1 << 5 |
+                                                                1 << 3;//1 * 1000
+
     /** default time -> '3' seconds */
-    public static final long __3s_TIME =                                     1 << 1 |
-                                                                                1 << 0;//3ms
+    public static final long __3s_TIME =                               (1 << 1 |
+                                                                             1 << 0)* __1s_TIME;//3 * 1000ms
 
     /** default time -> '10' seconds */
-    public static final long __10s_TIME = 1 << 9 |
-                                                1 << 8 |
-                                                    1 << 7 |
-                                                        1 << 6 |
-                                                            1 << 5 |
-                                                                    1 << 3;//1 * 1000ms
+    public static final long __10s_TIME =                      (1 << 3 |
+                                                                        1 << 1) * __1s_TIME;//10 * 1000ms
     /** default time -> '60' seconds */
-    public static final long __60s_TIME =                    (1 << 5 |
-                                                                1 << 4 |
-                                                                    1 << 3 |
-                                                                        1 << 2) * __10s_TIME;//1 * 60 * 1000ms
+    public static final long __60s_TIME =              (1 << 5 |
+                                                            1 << 4 |
+                                                                1 << 3 |
+                                                                    1 << 2) * __1s_TIME;//1 * 60 * 1000ms
 
     //////////////////////////////////////////////
 
@@ -87,17 +92,27 @@ public class PollingManager implements IFunctions{
     }
 
     @Override
-    public PollingManager startPolling() {
+    public void doPolling() {
         if (null != polling)
             polling.startPolling();
-
-        return this;
     }
 
     @Override
     public void endPolling() {
         if (null != polling)
             polling.endPolling();
+    }
+
+    @Override
+    public void doDelay(long delayTime) {
+        if (null != polling)
+            polling.startDelay(delayTime);
+    }
+
+    @Override
+    public void doDelayAt(long delayTime) {
+        if (null != polling)
+            polling.startAt(delayTime);
     }
 
     ////{
