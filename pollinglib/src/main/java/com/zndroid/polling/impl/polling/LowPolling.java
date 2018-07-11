@@ -3,7 +3,6 @@ package com.zndroid.polling.impl.polling;
 import android.content.Context;
 import android.os.Handler;
 
-import com.zndroid.polling.PollingManager;
 import com.zndroid.polling.core.IPolling;
 
 /**
@@ -12,8 +11,6 @@ import com.zndroid.polling.core.IPolling;
  * @description <= '1' minute to use it
  */
 public class LowPolling extends IPolling {
-    /** default */
-    private int delayTime = PollingManager.__10s_TIME;
 
     private Handler mHandler;
 
@@ -25,11 +22,23 @@ public class LowPolling extends IPolling {
 
     @Override
     public void startPolling() {
+        super.startPolling();
+    }
 
+    @Override
+    public void startDelay(long delayTime) {
+        if (null != mHandler)
+            mHandler.postDelayed(mPollRunning, delayTime);
+    }
+
+    @Override
+    public void startAt(long delayTime) {
+        if (null != mHandler)
+            mHandler.postAtTime(mPollRunning, delayTime);
     }
 
     @Override
     public void endPolling() {
-
+        super.endPolling();
     }
 }

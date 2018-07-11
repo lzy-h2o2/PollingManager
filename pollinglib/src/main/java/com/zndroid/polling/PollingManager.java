@@ -20,21 +20,21 @@ public class PollingManager implements IFunctions{
 
     //////////////////////////////////////////////
     /** default time right away  -> '0' seconds */
-    public static final int __0s_TIME = 0;
+    public static final long __0s_TIME = 0;
 
     /** default time -> '3' seconds */
-    public static final int __3s_TIME =                                     1 << 1 |
+    public static final long __3s_TIME =                                     1 << 1 |
                                                                                 1 << 0;//3ms
 
     /** default time -> '10' seconds */
-    public static final int __10s_TIME = 1 << 9 |
+    public static final long __10s_TIME = 1 << 9 |
                                                 1 << 8 |
                                                     1 << 7 |
                                                         1 << 6 |
                                                             1 << 5 |
                                                                     1 << 3;//1 * 1000ms
     /** default time -> '60' seconds */
-    public static final int __60s_TIME =                    (1 << 5 |
+    public static final long __60s_TIME =                    (1 << 5 |
                                                                 1 << 4 |
                                                                     1 << 3 |
                                                                         1 << 2) * __10s_TIME;//1 * 60 * 1000ms
