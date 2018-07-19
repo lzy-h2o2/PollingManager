@@ -33,6 +33,6 @@ public class MainActivity extends Activity {
                         LogUtil.d("hyhyhyhy");
                     }
                 })
-                .doDelay(PollingManager.__10s_TIME);
+                .doDelay(PollingManager.__TIME_3s);
     }
 }
