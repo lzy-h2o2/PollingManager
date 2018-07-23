@@ -9,7 +9,9 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.text.TextUtils;
 
+import com.zndroid.polling.PollingManager;
 import com.zndroid.polling.core.IPolling;
+import com.zndroid.polling.utils.LogUtil;
 
 /**
  * @author lazy
@@ -31,10 +33,11 @@ public class LowPolling extends IPolling {
     private final String __ACTION = "polling_do_background_task_action";
 
     @Override
-    public void init(Context context) {
+    public void init(final Context context) {
         if (null == mHandlerThread) {
             mHandlerThread = new HandlerThread("LowPolling");
             mHandlerThread.start();
+
             mHandler = new Handler(mHandlerThread.getLooper()) {
                 @Override
                 public void handleMessage(Message msg) {
@@ -43,11 +46,15 @@ public class LowPolling extends IPolling {
                     switch (msg.what) {
                         case MSG_DO_LOOP:
                             isLoopRunning = true;
+                            mHandler.sendEmptyMessageDelayed(MSG_DO_TASK, PollingManager.__TIME_3s);
                             break;
                         case MSG_DO_TASK:
-                            Intent mIntent = new Intent();
+                            LogUtil.i("tttt" + mPollRunning.toString());
+                            mPollRunning.run();
+                            mHandler.sendEmptyMessage(MSG_DO_LOOP);
+                            Intent mIntent = new Intent(context, BackgroundTask.class);
                             mIntent.setAction(__ACTION);
-                            mBackgroundTask.startService(mIntent);
+                            context.startService(mIntent);
                             break;
                         default:
                             break;
@@ -61,7 +68,6 @@ public class LowPolling extends IPolling {
     public void startPolling() {
         if (null != mHandlerThread && null != mHandler && !isLoopRunning) {
             isLoopRunning = true;
-            mBackgroundTask = new BackgroundTask("polling_task");
             mHandler.sendEmptyMessage(MSG_DO_LOOP);
         }
 
@@ -111,11 +117,15 @@ public class LowPolling extends IPolling {
 
         @Override
         protected void onHandleIntent(Intent intent) {
+            LogUtil.i("hhhhhh");
+
             if (null != intent && !TextUtils.isEmpty(intent.getAction()))
-                if (__ACTION.equals(intent.getAction()))
+                if (__ACTION.equals(intent.getAction())) {
                     synchronized (this) {
                         mPollRunning.run();
                     }
+                }
+            mHandler.sendEmptyMessage(MSG_DO_LOOP);
         }
     }
 }
