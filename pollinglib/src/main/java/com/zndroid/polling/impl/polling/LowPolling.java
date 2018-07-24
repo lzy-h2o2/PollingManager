@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.zndroid.polling.PollingManager;
 import com.zndroid.polling.core.IPolling;
@@ -31,6 +32,7 @@ public class LowPolling extends IPolling {
     private final int MSG_DO_LOOP = 0x0002;
 
     private final String __ACTION = "polling_do_background_task_action";
+    private final String __INTENT_SERVICE_NAME = "polling_task_intent_service";
 
     @Override
     public void init(final Context context) {
@@ -50,8 +52,7 @@ public class LowPolling extends IPolling {
                             break;
                         case MSG_DO_TASK:
                             LogUtil.i("tttt" + mPollRunning.toString());
-                            mPollRunning.run();
-                            mHandler.sendEmptyMessage(MSG_DO_LOOP);
+//                            mHandler.sendEmptyMessage(MSG_DO_LOOP);
                             Intent mIntent = new Intent(context, BackgroundTask.class);
                             mIntent.setAction(__ACTION);
                             context.startService(mIntent);
@@ -112,12 +113,12 @@ public class LowPolling extends IPolling {
     private class BackgroundTask extends IntentService {
 
         public BackgroundTask(String name) {
-            super(name);
+            super(__INTENT_SERVICE_NAME);
         }
 
         @Override
         protected void onHandleIntent(Intent intent) {
-            LogUtil.i("hhhhhh");
+            Log.i("hyhy","hhhhhh");
 
             if (null != intent && !TextUtils.isEmpty(intent.getAction()))
                 if (__ACTION.equals(intent.getAction())) {
