@@ -1,17 +1,14 @@
 package com.zndroid.polling.impl.polling;
 
-import android.app.IntentService;
 import android.content.Context;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.text.TextUtils;
 
 import com.zndroid.polling.PollingManager;
 import com.zndroid.polling.core.IPolling;
-import com.zndroid.polling.utils.LogUtil;
 
 /**
  * @author lazy
@@ -49,12 +46,8 @@ public class LowPolling extends IPolling {
                             mHandler.sendEmptyMessageDelayed(MSG_DO_TASK, PollingManager.__TIME_3s);
                             break;
                         case MSG_DO_TASK:
-                            LogUtil.i("tttt" + mPollRunning.toString());
-                            mPollRunning.run();
-                            mHandler.sendEmptyMessage(MSG_DO_LOOP);
-                            Intent mIntent = new Intent(context, BackgroundTask.class);
-                            mIntent.setAction(__ACTION);
-                            context.startService(mIntent);
+                            mBackgroundTask = new BackgroundTask();
+                            mBackgroundTask.execute(__ACTION);
                             break;
                         default:
                             break;
@@ -70,7 +63,6 @@ public class LowPolling extends IPolling {
             isLoopRunning = true;
             mHandler.sendEmptyMessage(MSG_DO_LOOP);
         }
-
     }
 
     @Override
@@ -109,23 +101,18 @@ public class LowPolling extends IPolling {
     }
 
     /** 后台执行任务*/
-    private class BackgroundTask extends IntentService {
-
-        public BackgroundTask(String name) {
-            super(name);
+    private class BackgroundTask extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            if (__ACTION.equals(strings[0]))
+                mPollRunning.run();
+            return __ACTION;
         }
 
         @Override
-        protected void onHandleIntent(Intent intent) {
-            LogUtil.i("hhhhhh");
-
-            if (null != intent && !TextUtils.isEmpty(intent.getAction()))
-                if (__ACTION.equals(intent.getAction())) {
-                    synchronized (this) {
-                        mPollRunning.run();
-                    }
-                }
-            mHandler.sendEmptyMessage(MSG_DO_LOOP);
+        protected void onPostExecute(String s) {
+            if (__ACTION.equals(s))
+                mHandler.sendEmptyMessage(MSG_DO_LOOP);
         }
     }
 }
