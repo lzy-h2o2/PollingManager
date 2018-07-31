@@ -9,7 +9,7 @@ import com.zndroid.polling.impl.polling.HighPolling;
  * @create 2018/6/28
  * @description
  */
-public class HighPollingFactory implements IPollingFactory{
+public class HighPollingFactory implements IPollingFactory {
     @Override
     public IPolling createPolling() {
         return new HighPolling();

@@ -9,7 +9,7 @@ import com.zndroid.polling.impl.polling.LowPolling;
  * @create 2018/6/28
  * @description
  */
-public class LowPollingFactory implements IPollingFactory{
+public class LowPollingFactory implements IPollingFactory {
     @Override
     public IPolling createPolling() {
         return new LowPolling();
