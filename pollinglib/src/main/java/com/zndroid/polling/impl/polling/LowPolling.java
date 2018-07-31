@@ -23,6 +23,7 @@ public class LowPolling extends IPolling {
     private BackgroundTask mBackgroundTask;
 
     private boolean isLoopRunning = false;
+    private long PERIOD_TIME = 0;
 
     private final int MSG_DO_TASK = 0x0001;
     private final int MSG_DO_LOOP = 0x0002;
@@ -43,7 +44,7 @@ public class LowPolling extends IPolling {
                     switch (msg.what) {
                         case MSG_DO_LOOP:
                             isLoopRunning = true;
-                            mHandler.sendEmptyMessageDelayed(MSG_DO_TASK, PollingManager.__TIME_3s);
+                            mHandler.sendEmptyMessageDelayed(MSG_DO_TASK, PERIOD_TIME);
                             break;
                         case MSG_DO_TASK:
                             mBackgroundTask = new BackgroundTask();
@@ -60,7 +61,15 @@ public class LowPolling extends IPolling {
     @Override
     public void startPolling() {
         if (null != mHandlerThread && null != mHandler && !isLoopRunning) {
-            isLoopRunning = true;
+            PERIOD_TIME = PollingManager.__TIME_3s;
+            mHandler.sendEmptyMessage(MSG_DO_LOOP);
+        }
+    }
+
+    @Override
+    public void startPolling(long period) {
+        if (null != mHandlerThread && null != mHandler && !isLoopRunning) {
+            PERIOD_TIME = period;
             mHandler.sendEmptyMessage(MSG_DO_LOOP);
         }
     }
