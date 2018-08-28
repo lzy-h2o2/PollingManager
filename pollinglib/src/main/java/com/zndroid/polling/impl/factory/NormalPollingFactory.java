@@ -9,7 +9,7 @@ import com.zndroid.polling.impl.polling.NormalPolling;
  * @create 2018/6/28
  * @description
  */
-public class NormalPollingFactory implements IPollingFactory{
+public class NormalPollingFactory implements IPollingFactory {
     @Override
     public IPolling createPolling() {
         return new NormalPolling();

@@ -37,18 +37,29 @@ public class NormalPolling extends IPolling {
         //                              scheduleAtFixedRate下次执行时间不会受耗时操作时间影响，会从事物开始执行的时间点执行
 //        mTimer.schedule();
 //        mTimer.scheduleAtFixedRate();
-        mTimer.schedule(mTimerTask, PollingManager.__TIME_0s, PollingManager.__TIME_10s);//立即执行，执行周期10秒
+        mTimer.schedule(mTimerTask, PollingManager.__TIME_0s, PollingManager.__TIME_3s);//立即执行，执行周期3秒
+    }
+
+    @Override
+    public void startPolling(long period) {
+        mTimer.schedule(mTimerTask, PollingManager.__TIME_0s, period);//立即执行，执行周期3秒
     }
 
     @Override
     public void startAt(long delayTime) {
-        super.startAt(delayTime);
+        mTimer.schedule(mTimerTask, delayTime);
     }
 
     @Override
     public void endPolling() {
-        if (null != mTimer)
+        if (null != mTimer) {
             mTimer.cancel();
+            mTimer = null;
+        }
+        if (null != mTimerTask) {
+            mTimerTask.cancel();
+            mTimerTask = null;
+        }
     }
 
     private class NormalTimerTask extends TimerTask {
