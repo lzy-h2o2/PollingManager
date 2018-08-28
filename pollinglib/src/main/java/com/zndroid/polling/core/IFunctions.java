@@ -18,6 +18,7 @@ public interface IFunctions {
 
     //// api
     void doPolling();
+    void doPolling(long period);
     void doDelay(long delayTime);
     void doDelayAt(long delayTime);
     void endPolling();

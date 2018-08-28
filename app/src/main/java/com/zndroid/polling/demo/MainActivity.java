@@ -38,5 +38,7 @@ public class MainActivity extends Activity {
                     }
                 })
                 .doPolling();
+
+
     }
 }

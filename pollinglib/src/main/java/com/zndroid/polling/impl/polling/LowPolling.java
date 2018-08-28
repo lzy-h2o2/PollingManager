@@ -1,23 +1,19 @@
 package com.zndroid.polling.impl.polling;
 
-import android.app.IntentService;
 import android.content.Context;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.zndroid.polling.PollingManager;
 import com.zndroid.polling.core.IPolling;
-import com.zndroid.polling.utils.LogUtil;
 
 /**
  * @author lazy
  * @create 2018/6/28
- * @description <= '1' minute to use it
+ * @description <= '1' minute to use it and support cancel the pending task
  */
 public class LowPolling extends IPolling {
 
@@ -31,8 +27,7 @@ public class LowPolling extends IPolling {
     private final int MSG_DO_TASK = 0x0001;
     private final int MSG_DO_LOOP = 0x0002;
 
-    private final String __ACTION = "polling_do_background_task_action";
-    private final String __INTENT_SERVICE_NAME = "polling_task_intent_service";
+    private long times;
 
     @Override
     public void init(final Context context) {
@@ -48,14 +43,11 @@ public class LowPolling extends IPolling {
                     switch (msg.what) {
                         case MSG_DO_LOOP:
                             isLoopRunning = true;
-                            mHandler.sendEmptyMessageDelayed(MSG_DO_TASK, PollingManager.__TIME_3s);
+                            mHandler.sendEmptyMessageDelayed(MSG_DO_TASK, times);
                             break;
                         case MSG_DO_TASK:
-                            LogUtil.i("tttt" + mPollRunning.toString());
-//                            mHandler.sendEmptyMessage(MSG_DO_LOOP);
-                            Intent mIntent = new Intent(context, BackgroundTask.class);
-                            mIntent.setAction(__ACTION);
-                            context.startService(mIntent);
+                            mBackgroundTask = new BackgroundTask();
+                            mBackgroundTask.execute(Integer.MAX_VALUE);
                             break;
                         default:
                             break;
@@ -69,9 +61,19 @@ public class LowPolling extends IPolling {
     public void startPolling() {
         if (null != mHandlerThread && null != mHandler && !isLoopRunning) {
             isLoopRunning = true;
+            times = PollingManager.__TIME_3s;//默认轮询
             mHandler.sendEmptyMessage(MSG_DO_LOOP);
         }
 
+    }
+
+    @Override
+    public void startPolling(long period) {
+        if (null != mHandlerThread && null != mHandler && !isLoopRunning) {
+            isLoopRunning = true;
+            times = period;
+            mHandler.sendEmptyMessage(MSG_DO_LOOP);
+        }
     }
 
     @Override
@@ -110,23 +112,19 @@ public class LowPolling extends IPolling {
     }
 
     /** 后台执行任务*/
-    private class BackgroundTask extends IntentService {
+    private class BackgroundTask extends AsyncTask<Integer, Integer, Integer> {
 
-        public BackgroundTask(String name) {
-            super(__INTENT_SERVICE_NAME);
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            if (null != mPollRunning)
+                mPollRunning.run();
+            return 0;
         }
 
         @Override
-        protected void onHandleIntent(Intent intent) {
-            Log.i("hyhy","hhhhhh");
-
-            if (null != intent && !TextUtils.isEmpty(intent.getAction()))
-                if (__ACTION.equals(intent.getAction())) {
-                    synchronized (this) {
-                        mPollRunning.run();
-                    }
-                }
-            mHandler.sendEmptyMessage(MSG_DO_LOOP);
+        protected void onPostExecute(Integer integer) {
+            if (0 == integer)
+                mHandler.sendEmptyMessage(MSG_DO_LOOP);
         }
     }
 }

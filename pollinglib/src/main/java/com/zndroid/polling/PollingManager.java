@@ -89,6 +89,12 @@ public class PollingManager implements IFunctions{
     }
 
     @Override
+    public void doPolling(long period) {
+        if (null != polling && period > 0)
+            polling.startPolling(period);
+    }
+
+    @Override
     public void endPolling() {
         if (null != polling)
             polling.endPolling();
