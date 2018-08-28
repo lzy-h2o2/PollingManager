@@ -43,6 +43,14 @@ public class PollingManager implements IFunctions{
     ///
     private IPolling polling;
 
+    /**
+     * build polling for different implementations. (multiple calls this when you execute different polling)<br>
+     * <code>HIGH - AlarmManager</code> <br>
+     * <code>NORMAL - Timer & TimerTask</code> <br>
+     * <code>LOW - Handler</code>
+     * @param power PowerEnum
+     * @return PollingManager
+     * */
     @Override
     public PollingManager build(PowerEnum power) {
         switch (power) {
@@ -62,6 +70,11 @@ public class PollingManager implements IFunctions{
         return this;
     }
 
+    /**
+     * store the parent context
+     * @param context Context
+     * @return PollingManager
+     * */
     @Override
     public PollingManager with(Context context) {
         if (null == context)
@@ -75,6 +88,11 @@ public class PollingManager implements IFunctions{
         return this;
     }
 
+    /**
+     * you can do something on this callback, this callback on the child thread .
+     * @param mPollRunning IPollRunning
+     * @return PollingManager
+     * */
     @Override
     public PollingManager resultAt(IPollRunning mPollRunning) {
         if (null != polling)
@@ -82,30 +100,49 @@ public class PollingManager implements IFunctions{
         return this;
     }
 
+    /**
+     * the default polling with 3 sec. {@link #endPolling()} end the polling
+     * */
     @Override
     public void doPolling() {
         if (null != polling)
             polling.startPolling();
     }
 
+    /**
+     * polling with <code>period</code> sec. {@link #endPolling()} end the polling.
+     * by the way, if you use <i>'LowPolling'</i> will remove any pending posts of messages with code 'what' that are in the
+     * message queue when called <code>endPolling()</code>.
+     * */
     @Override
     public void doPolling(long period) {
         if (null != polling && period > 0)
             polling.startPolling(period);
     }
 
+    /**
+     * end the polling & release
+     * */
     @Override
     public void endPolling() {
         if (null != polling)
             polling.endPolling();
     }
 
+    /**
+     * schedules the specified task for execution after the specified delay.
+     * @param delayTime
+     * */
     @Override
     public void doDelay(long delayTime) {
         if (null != polling && delayTime > 0)
             polling.startDelay(delayTime);
     }
 
+    /**
+     * schedules the specified task for execution at the specified time.
+     * If the time is in the past, the task is scheduled for immediate execution when you use <i>'NormalPolling'</i> .
+     * */
     @Override
     public void doDelayAt(long atTime) {
         if (null != polling && atTime > 0)
@@ -118,6 +155,10 @@ public class PollingManager implements IFunctions{
         private static final PollingManager MANAGER = new PollingManager();
     }
 
+    /**
+     * get instance only one.
+     * @return PollingManager
+     * */
     public static PollingManager getInstance() {
         return $.MANAGER;
     }

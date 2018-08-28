@@ -14,9 +14,9 @@ import java.util.TimerTask;
  * @create 2018/6/28
  * @description
  * It is recommended to use If
- * the time-consuming operation execution time
+ *      the time-consuming operation execution time
  * is less than
- * the polling period
+ *      the polling period
  */
 public class NormalPolling extends IPolling {
 
