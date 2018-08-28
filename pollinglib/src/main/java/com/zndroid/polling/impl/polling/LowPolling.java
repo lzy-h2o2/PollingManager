@@ -43,6 +43,10 @@ public class LowPolling extends IPolling {
                     switch (msg.what) {
                         case MSG_DO_LOOP:
                             isLoopRunning = true;
+                            //实际情况我们认为是期望第一次执行不是立即执行，而应该是延迟指定n时间执行，
+                            //因为需要轮询的任务往往都是上一任务结束在下一周期再继续执行时间监控，
+                            //所以采用了sendEmptyMessageDelayed方法， 该方法同时还支持未执行的任务回退的功能
+                            //{@link #removeMessages()}
                             mHandler.sendEmptyMessageDelayed(MSG_DO_TASK, times);
                             break;
                         case MSG_DO_TASK:
@@ -83,9 +87,9 @@ public class LowPolling extends IPolling {
     }
 
     @Override
-    public void startAt(long delayTime) {
+    public void startAt(long atTime) {
         if (null != mHandler)
-            mHandler.postAtTime(mPollRunning, delayTime);
+            mHandler.postAtTime(mPollRunning, atTime);
     }
 
     @Override

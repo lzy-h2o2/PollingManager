@@ -20,6 +20,6 @@ public interface IFunctions {
     void doPolling();
     void doPolling(long period);
     void doDelay(long delayTime);
-    void doDelayAt(long delayTime);
+    void doDelayAt(long atTime);
     void endPolling();
 }

@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
 
         pollingManager
                 .build(PowerEnum.LOW)
-                .with(this)
+                .with(this.getApplication())
                 .resultAt(new IPollRunning() {
                     @Override
                     public void run() {
@@ -41,4 +41,5 @@ public class MainActivity extends Activity {
 
 
     }
+
 }

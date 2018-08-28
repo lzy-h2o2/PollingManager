@@ -16,14 +16,14 @@ public abstract class IPolling {
         this.mPollRunning = mPollRunning;
     }
 
-    /** 默认轮询*/
+    /** 默认轮询 时间间隔为 3 秒*/
     public void startPolling() { throw new UnsupportedOperationException("not implements it"); }
     /** 指定轮询时间*/
     public void startPolling(long period) { throw new UnsupportedOperationException("not implements it"); }
     /** 在指定延迟时间后执行*/
     public void startDelay(long delayTime) { throw new UnsupportedOperationException("not implements it"); }
     /** 在指定时间执行*/
-    public void startAt(long delayTime) { throw new UnsupportedOperationException("not implements it");}
+    public void startAt(long atTime) { throw new UnsupportedOperationException("not implements it");}
     /** 结束轮询释放资源*/
     public void endPolling() { throw new UnsupportedOperationException("not implements it"); }
 
