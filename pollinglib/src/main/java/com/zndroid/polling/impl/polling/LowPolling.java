@@ -73,6 +73,9 @@ public class LowPolling extends IPolling {
 
     @Override
     public void startPolling(long period) {
+        if (period < 0)
+            throw new IllegalArgumentException("Negative period.");
+
         if (null != mHandlerThread && null != mHandler && !isLoopRunning) {
             isLoopRunning = true;
             times = period;
@@ -82,12 +85,18 @@ public class LowPolling extends IPolling {
 
     @Override
     public void startDelay(long delayTime) {
+        if (delayTime < 0)
+            throw new IllegalArgumentException("Negative delay.");
+
         if (null != mHandler)
             mHandler.postDelayed(mPollRunning, delayTime);
     }
 
     @Override
     public void startAt(long atTime) {
+        if (atTime < 0)
+            throw new IllegalArgumentException("Negative time.");
+
         if (null != mHandler)
             mHandler.postAtTime(mPollRunning, atTime);
     }

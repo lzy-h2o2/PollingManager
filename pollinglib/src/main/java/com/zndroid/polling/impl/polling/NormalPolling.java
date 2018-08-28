@@ -5,6 +5,7 @@ import android.content.Context;
 import com.zndroid.polling.PollingManager;
 import com.zndroid.polling.core.IPolling;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,12 +43,25 @@ public class NormalPolling extends IPolling {
 
     @Override
     public void startPolling(long period) {
-        mTimer.schedule(mTimerTask, PollingManager.__TIME_0s, period);//立即执行，执行周期3秒
+        if (period < 0)
+            throw new IllegalArgumentException("Negative period.");
+
+        mTimer.schedule(mTimerTask, PollingManager.__TIME_0s, period);//立即执行，并指定执行周期
     }
 
     @Override
-    public void startAt(long delayTime) {
+    public void startDelay(long delayTime) {
+        if (delayTime < 0)
+            throw new IllegalArgumentException("Negative delay.");
+
         mTimer.schedule(mTimerTask, delayTime);
+    }
+
+    @Override
+    public void startAt(long atTime) {
+        //如果指定的时间已过 - 立即执行
+        Date date = new Date(atTime);
+        mTimer.schedule(mTimerTask, date);
     }
 
     @Override

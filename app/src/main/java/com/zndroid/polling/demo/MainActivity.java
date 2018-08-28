@@ -34,11 +34,10 @@ public class MainActivity extends Activity {
                 .resultAt(new IPollRunning() {
                     @Override
                     public void run() {
-                        LogUtil.d("hyhy" + System.currentTimeMillis()/ 1000);
+                        LogUtil.d("hyhy  " + System.currentTimeMillis()/ 1000);
                     }
                 })
                 .doPolling();
-
 
     }
 

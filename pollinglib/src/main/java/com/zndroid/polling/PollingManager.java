@@ -102,13 +102,13 @@ public class PollingManager implements IFunctions{
 
     @Override
     public void doDelay(long delayTime) {
-        if (null != polling)
+        if (null != polling && delayTime > 0)
             polling.startDelay(delayTime);
     }
 
     @Override
     public void doDelayAt(long atTime) {
-        if (null != polling)
+        if (null != polling && atTime > 0)
             polling.startAt(atTime);
     }
 
